@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎴 Open-Gi-Oh! - 完整卡组解析展示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #ff6b6b, #ffcc00, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .control-panel {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .match-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .match-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+        }
+        
+        .match-btn:disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .decks-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 1400px) {
+            .decks-container {
+                flex-direction: column;
+            }
+        }
+        
+        .deck-panel {
+            flex: 1;
+            min-width: 600px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .deck-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .deck-icon {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 15px;
+        }
+        
+        .deck-title {
+            flex: 1;
+        }
+        
+        .deck-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+        
+        .deck-subtitle {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .deck-id {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+        
+        .deck-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .info-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: #86efac;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        
+        .strategy-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .preferences-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .pref-tag {
+            background: rgba(59, 130, 246, 0.15);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #86efac;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        .cards-section {
+            margin-top: 30px;
+        }
+        
+        .cards-title {
+            font-size: 1.4rem;
+            color: #fbbf24;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-height: 800px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .card-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+        
+        .card-panel:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .card-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .card-image {
+            width: 100px;
+            height: 140px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .card-basic-info {
+            flex: 1;
+        }
+        
+        .card-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .card-id {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin-bottom: 10px;
+        }
+        
+        .card-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .card-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .cost-number { color: #ff9a3c; }
+        .attack-number { color: #ef4444; }
+        .health-number { color: #10b981; }
+        
+        .stat-label-small {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        
+        .card-details {
+            margin-top: 15px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .detail-label {
+            width: 80px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .rarity-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .rarity-common { background: #64748b; color: white; }
+        .rarity-rare { background: #3b82f6; color: white; }
+        .rarity-epic { background: #8b5cf6; color: white; }
+        .rarity-legendary { background: #f59e0b; color: white; }
+        
+        .effect-box {
+            background: rgba(16, 185, 129, 0.15);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        
+        .effect-label {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+        
+        .effect-text {
+            font-size: 1.1rem;
+            color: #86efac;
+            font-weight: bold;
+        }
+        
+        .log-area {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .log-title {
+            color: #cbd5e1;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .log-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+        }
+        
+        .placeholder {
+            text-align: center;
+            padding: 60px;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            grid-column: 1 / -1;
+        }
+        
+        .success-message {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 页头 -->
+        <div class="header">
+            <h1>🎴 Open-Gi-Oh! - 完整卡组解析展示</h1>
+            <p>按照步骤实现：1. 从deck_definitions.js随机匹配2个卡组 → 2. 从balanced_shrimp_cards_30hp_corrected.js获取卡牌完整信息 → 3. 从images/shrimp-cards/匹配卡图</p>
+            <p style="color: #fbbf24; margin-top: 10px; font-weight: bold;">
+                展示所有字段：卡组完整信息 + 卡牌完整信息（包括卡图、攻击力、生命值、费用、效果、卡牌故事等）
+            </p>
+        </div>
+        
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <button id="matchDecksBtn" class="match-btn">
+                🎲 随机匹配卡组 (完整解析)
+            </button>
+        </div>
+        
+        <!-- 卡组展示区域 -->
+        <div class="decks-container">
+            <!-- 卡组1 -->
+            <div class="deck-panel" id="deck1Panel">
+                <div class="deck-header">
+                    <div class="deck-icon" id="deck1Icon">🛡️</div>
+                    <div class="deck-title">
+                        <div class="deck-name" id="deck1Name">卡组1 (等待匹配)</div>
+                        <div class="deck-subtitle" id="deck1Subtitle">点击按钮开始匹配</div>
+                    </div>
+                    <div class="deck-id" id="deck1Id">ID: 未匹配</div>
+                </div>
+                
+                <!-- 卡组信息网格 -->
+                <div class="deck-info-grid">
+                    <!-- 策略信息 -->
+                    <div class="info-section">
+                        <div class="section-title">🎯 策略信息</div>
+                        <div class="section-content strategy-text" id="deck1Strategy">
+                            等待匹配后显示策略信息...
+                        </div>
+                    </div>
+                    
+                    <!-- 战斗战术 -->
+                    <div class="info-section">
+                        <div class="section-title">⚔️ 战斗战术</div>
+                        <div class="section-content strategy-text" id="deck1BattleTactics">
+                            等待匹配后显示战斗战术...
+                        </div>
+                    </div>
+                    
+                    <!-- 卡组描述 -->
+                    <div class="info-section">
+                        <div class="section-title">📝 卡组描述</div>
+                        <div class="section-content strategy-text" id="deck1Description">
+                            等待匹配后显示卡组描述...
+                        </div>
+                    </div>
+                    
+                    <!-- 偏好设置 -->
+                    <div class="info-section">
+                        <div class="section-title">❤️ 偏好设置</div>
+                        <div class="section-content">
+                            <div style="margin-bottom: 10px;">
+                                <strong>性格偏好:</strong>
+                                <div class="preferences-list" id="deck1Personalities">
+                                    <span class="pref-tag">等待匹配</span>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong>费用范围:</strong>
+                                <div class="preferences-list" id="deck1CostRange">
+                                    <span class="pref-tag">等待匹配</span>
+                                </div>
+                            </div>
+                            <div>
+                                <strong>效果偏好:</strong>
+                                <div class="preferences-list" id="deck1Effects">
+                                    <span class="pref-tag">等待匹配</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 统计信息 -->
+                <div class="info-section">
+                    <div class="section-title">📊 统计信息</div>
+                    <div class="stats-grid" id="deck1Stats">
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">平均费用</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">平均攻击</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">平均生命</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">卡牌总数</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 卡牌展示 -->
+                <div class="cards-section">
+                    <div class="cards-title">
+                        <span>🃏</span> 卡组卡牌 (共 <span id="deck1TotalCards">0</span> 张)
+                    </div>
+                    <div class="cards-container" id="deck1Cards">
+                        <div class="placeholder">
+                            🃏 匹配卡组后，将在此处显示卡组中的所有卡牌完整信息
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 卡组2 -->
+            <div class="deck-panel" id="deck2Panel">
+                <div class="deck-header">
+                    <div class="deck-icon" id="deck2Icon">⚡</div>
+                    <div class="deck-title">
+                        <div class="deck-name" id="deck2Name">卡组2 (等待匹配)</div>
+                        <div class="deck-subtitle" id="deck2Subtitle">点击按钮开始匹配</div>
+                    </div>
+                    <div class="deck-id" id="deck2Id">ID: 未匹配</div>
+                </div>
+                
+                <!-- 卡组信息网格 -->
+                <div class="deck-info-grid">
+                    <!-- 策略信息 -->
+                    <div class="info-section">
+                        <div class="section-title">🎯 策略信息</div>
+                        <div class="section-content strategy-text" id="deck2Strategy">
+                            等待匹配后显示策略信息...
+                        </div>
+                    </div>
+                    
+                    <!-- 战斗战术 -->
+                    <div class="info-section">
+                        <div class="section-title">⚔️ 战斗战术</div>
+                        <div class="section-content strategy-text" id="deck2BattleTactics">
+                            等待匹配后显示战斗战术...
+                        </div>
+                    </div>
+                    
+                    <!-- 卡组描述 -->
+                    <div class="info-section">
+                        <div class="section-title">📝 卡组描述</div>
+                        <div class="section-content strategy-text" id="deck2Description">
+                            等待匹配后显示卡组描述...
+                        </div>
+                    </div>
+                    
+                    <!-- 偏好设置 -->
+                    <div class="info-section">
+                        <div class="section-title">❤️ 偏好设置</div>
+                        <div class="section-content">
+                            <div style="margin-bottom: 10px;">
+                                <strong>性格偏好:</strong>
+                                <div class="preferences-list" id="deck2Personalities">
+                                    <span class="pref-tag">等待匹配</span>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong>费用范围:</strong>
+                                <div class="preferences-list" id="deck2CostRange">
+                                    <span class="pref-tag">等待匹配</span>
+                                </div>
+                            </div>
+                            <div>
+                                <strong>效果偏好:</strong>
+                                <div class="preferences-list" id="deck2Effects">
+                                    <span class="pref-tag">等待匹配</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 统计信息 -->
+                <div class="info-section">
+                    <div class="section-title">📊 统计信息</div>
+                    <div class="stats-grid" id="deck2Stats">
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">平均费用</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">平均攻击</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">平均生命</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">卡牌总数</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 卡牌展示 -->
+                <div class="cards-section">
+                    <div class="cards-title">
+                        <span>🃏</span> 卡组卡牌 (共 <span id="deck2TotalCards">0</span> 张)
+                    </div>
+                    <div class="cards-container" id="deck2Cards">
+                        <div class="placeholder">
+                            🃏 匹配卡组后，将在此处显示卡组中的所有卡牌完整信息
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+                <!-- ======================
+           完整AI对战棋盘系统 (优化版)
+        ====================== -->
+        <div class="battle-arena" id="battleArena" style="margin: 40px 0; background: rgba(15, 23, 42, 0.7); border-radius: 15px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 2px solid rgba(255, 255, 255, 0.1);">
+                <h2 style="color: #fbbf24; font-size: 2rem; display: flex; align-items: center; gap: 15px;">
+                    ⚔️ AI对战棋盘系统（卡牌对战的自动演示（实现中... 暂未完成））
+                </h2>
+                <div style="display: flex; gap: 15px;">
+                    <button id="startBattleBtn" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 12px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;" disabled>
+                        🤖 开启AI对战
+                    </button>
+                    <button id="resetBattleBtn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; padding: 12px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;">
+                        🔄 重置对战
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 对局状态 -->
+            <div id="battleStatus" style="margin-bottom: 30px; padding: 20px; background: rgba(30, 41, 59, 0.5); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3);">
+                <div style="color: #3b82f6; font-size: 1.2rem; margin-bottom: 10px;">
+                    🎯 对局状态: <span id="battleStatusText">等待卡组匹配完成</span>
+                </div>
+                <div id="battleInfo" style="color: #cbd5e1; font-size: 0.9rem;">
+                    匹配两个卡组后，可以开启AI对战系统
+                </div>
+            </div>
+            
+            <!-- ======================
+                完整棋盘展示区域
+            ====================== -->
+            <div id="fullBattleBoard" style="display: none;">
+                <!-- 玩家1区域 -->
+                <div class="player-area" style="margin-bottom: 30px; padding: 20px; background: rgba(0, 0, 0, 0.2); border-radius: 10px; border: 2px solid rgba(255, 255, 255, 0.1);">
+                    <div class="player-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div class="player-name" style="font-size: 1.4rem; font-weight: bold; color: #fbbf24;">
+                            🛡️ 玩家1 - <span id="player1DeckName">控制消耗型</span>
+                        </div>
+                        <div class="player-stats" style="display: flex; gap: 20px;">
+                            <div class="stat-item" style="text-align: center;">
+                                <div class="stat-value" id="player1Health" style="font-size: 1.5rem; font-weight: bold; color: #ef4444;">30</div>
+                                <div class="stat-label" style="font-size: 0.9rem; color: #94a3b8;">生命值</div>
+                            </div>
+                            <div class="stat-item" style="text-align: center;">
+                                <div class="stat-value" id="player1Mana" style="font-size: 1.5rem; font-weight: bold; color: #3b82f6;">3</div>
+                                <div class="stat-label" style="font-size: 0.9rem; color: #94a3b8;">当前费用</div>
+                            </div>
+                            <div class="stat-item" style="text-align: center;">
+                                <div class="stat-value" id="player1Graveyard" style="font-size: 1.5rem; font-weight: bold; color: #94a3b8;">0</div>
+                                <div class="stat-label" style="font-size: 0.9rem; color: #94a3b8;">墓地</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 费用水晶展示 -->
+                    <div class="mana-area" style="margin: 15px 0;">
+                        <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 5px;">费用水晶:</div>
+                        <div class="mana-crystals" id="player1ManaCrystals" style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px;">
+                            <!-- 费用水晶会通过JS动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 手牌区域 -->
+                    <div class="hand-area" style="margin: 20px 0;">
+                        <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px;">
+                            🃏 手牌区域 (最多7张) - <span id="player1HandCount">0</span>张
+                        </div>
+                        <div class="hand-container" id="player1Hand" style="display: flex; gap: 10px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; min-height: 120px; border: 1px solid rgba(16, 185, 129, 0.3); overflow-x: auto;">
+                            <div style="display: flex; align-items: center; justify-content: center; color: #94a3b8; font-style: italic; width: 100%;">
+                                等待对战开始...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 战场区域 -->
+                    <div class="battlefield-area" style="margin: 20px 0;">
+                        <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px;">
+                            ⚔️ 战场区域 (最多5个虾虾) - <span id="player1BattlefieldCount">0</span>个
+                        </div>
+                        <div class="battlefield-grid" id="player1Battlefield" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; min-height: 120px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位1
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位2
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位3
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位4
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位5
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 玩家2区域 -->
+                <div class="player-area" style="margin-bottom: 30px; padding: 20px; background: rgba(0, 0, 0, 0.2); border-radius: 10px; border: 2px solid rgba(255, 255, 255, 0.1);">
+                    <div class="player-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div class="player-name" style="font-size: 1.4rem; font-weight: bold; color: #fbbf24;">
+                            ⚡ 玩家2 - <span id="player2DeckName">速攻压制型</span>
+                        </div>
+                        <div class="player-stats" style="display: flex; gap: 20px;">
+                            <div class="stat-item" style="text-align: center;">
+                                <div class="stat-value" id="player2Health" style="font-size: 1.5rem; font-weight: bold; color: #ef4444;">30</div>
+                                <div class="stat-label" style="font-size: 0.9rem; color: #94a3b8;">生命值</div>
+                            </div>
+                            <div class="stat-item" style="text-align: center;">
+                                <div class="stat-value" id="player2Mana" style="font-size: 1.5rem; font-weight: bold; color: #3b82f6;">4</div>
+                                <div class="stat-label" style="font-size: 0.9rem; color: #94a3b8;">当前费用</div>
+                            </div>
+                            <div class="stat-item" style="text-align: center;">
+                                <div class="stat-value" id="player2Graveyard" style="font-size: 1.5rem; font-weight: bold; color: #94a3b8;">0</div>
+                                <div class="stat-label" style="font-size: 0.9rem; color: #94a3b8;">墓地</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 费用水晶展示 -->
+                    <div class="mana-area" style="margin: 15px 0;">
+                        <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 5px;">费用水晶:</div>
+                        <div class="mana-crystals" id="player2ManaCrystals" style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px;">
+                            <!-- 费用水晶会通过JS动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 手牌区域 -->
+                    <div class="hand-area" style="margin: 20px 0;">
+                        <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px;">
+                            🃏 手牌区域 (最多7张) - <span id="player2HandCount">0</span>张
+                        </div>
+                        <div class="hand-container" id="player2Hand" style="display: flex; gap: 10px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; min-height: 120px; border: 1px solid rgba(16, 185, 129, 0.3); overflow-x: auto;">
+                            <div style="display: flex; align-items: center; justify-content: center; color: #94a3b8; font-style: italic; width: 100%;">
+                                等待对战开始...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 战场区域 -->
+                    <div class="battlefield-area" style="margin: 20px 0;">
+                        <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px;">
+                            ⚔️ 战场区域 (最多5个虾虾) - <span id="player2BattlefieldCount">0</span>个
+                        </div>
+                        <div class="battlefield-grid" id="player2Battlefield" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; min-height: 120px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位1
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位2
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位3
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位4
+                            </div>
+                            <div class="battlefield-slot" style="min-height: 100px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 2px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.9rem;">
+                                空位5
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 回合指示器 -->
+                <div id="turnIndicator" style="text-align: center; margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 10px; color: white; font-weight: bold; display: none;">
+                    🎲 当前回合: <span id="currentPlayer">玩家1</span> | 回合数: <span id="turnNumber">1</span>
+                </div>
+            </div>
+            
+            <!-- 游戏规则摘要 (保持不变) -->
+            <div style="margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08);">
+                <h3 style="color: #fbbf24; font-size: 1.4rem; margin-bottom: 15px;">📜 游戏核心规则</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <strong>回合制游戏</strong>
+                        <div style="color: #cbd5e1; margin-top: 8px;">双方轮流进行回合，生命值30点</div>
+                    </div>
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <strong>费用系统</strong>
+                        <div style="color: #cbd5e1; margin-top: 8px;">先手3点，后手4点，每回合+1，上限10点</div>
+                    </div>
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <strong>手牌系统</strong>
+                        <div style="color: #cbd5e1; margin-top: 8px;">初始3张，每回合抽1张，最多7张</div>
+                    </div>
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <strong>战斗系统</strong>
+                        <div style="color: #cbd5e1; margin-top: 8px;">召唤后等待一回合才能攻击，生命≤0时被消灭</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日志区域 -->
+        <div class="log-area">
+            <div class="log-title">📋 操作日志 (完整解析步骤)</div>
+            <div class="log-content" id="operationLog">
+                <div class="log-entry">
+                    🕐 [系统] 完整卡组解析系统已加载。
+                </div>
+                <div class="log-entry">
+                    📊 [系统] 准备执行三步解析流程：
+                </div>
+                <div class="log-entry">
+                    1️⃣ 从 deck_definitions.js 随机匹配2个卡组
+                </div>
+                <div class="log-entry">
+                    2️⃣ 从 balanced_shrimp_cards_30hp_corrected.js 获取卡牌完整信息
+                </div>
+                <div class="log-entry">
+                    3️⃣ 从 images/shrimp-cards/ 匹配卡图
+                </div>
+                <div class="log-entry">
+                    🎴 [系统] 点击"随机匹配卡组"按钮开始。
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 数据源文件 -->
+    <script src="deck_definitions.js"></script>
+    <script src="balanced_shrimp_cards_30hp_corrected.js"></script>
+    
+    <!-- 完整卡组解析逻辑 -->
+    <script>
+        // ======================
+        // 完整卡组解析系统
+        // ======================
+        
+        // 页面加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎴 完整卡组解析系统加载完成');
+            
+            // 验证数据源
+            if (typeof deckDefinitions === 'undefined') {
+                logMessage('❌ 错误: deck_definitions.js 数据未加载', 'error');
+                return;
+            }
+            
+            if (typeof balancedShrimpCards30HP === 'undefined') {
+                logMessage('❌ 错误: balanced_shrimp_cards_30hp_corrected.js 数据未加载', 'error');
+                return;
+            }
+            
+            logMessage(`✅ 数据源加载成功: ${deckDefinitions.length} 个卡组定义`);
+            logMessage(`✅ 数据源加载成功: ${balancedShrimpCards30HP.length} 张虾虾卡`);
+            
+            // 绑定事件
+            document.getElementById('matchDecksBtn').addEventListener('click', matchRandomDecksWithFullAnalysis);
+        });
+        
+        // 随机匹配卡组并进行完整解析
+        function matchRandomDecksWithFullAnalysis() {
+            logMessage('🎲 [步骤1] 开始随机匹配卡组...');
+            
+            // 禁用按钮，防止重复点击
+            const matchBtn = document.getElementById('matchDecksBtn');
+            matchBtn.disabled = true;
+            matchBtn.textContent = '⏳ 解析中...';
+            
+            try {
+                // 从deck_definitions中随机选择2个不同卡组
+                const availableDecks = [...deckDefinitions];
+                const selectedDecks = [];
+
+                for (let i = 0; i < 2; i++) {
+                    if (availableDecks.length === 0) break;
+                    
+                    const randomIndex = Math.floor(Math.random() * availableDecks.length);
+                    const deck = availableDecks[randomIndex];
+                    selectedDecks.push(deck);
+                    availableDecks.splice(randomIndex, 1);
+                }
+                
+                if (selectedDecks.length === 2) {
+                    logMessage(`✅ [步骤1] 卡组匹配成功: ${selectedDecks[0].name} vs ${selectedDecks[1].name}`);
+                    
+                    // 显示卡组1的完整信息
+                    displayDeckFullInfo(1, selectedDecks[0]);
+                    
+                    // 显示卡组2的完整信息
+                    displayDeckFullInfo(2, selectedDecks[1]);
+                    
+                    // 启用按钮
+                    setTimeout(() => {
+                        matchBtn.disabled = false;
+                        matchBtn.textContent = '🔄 重新匹配卡组 (完整解析)';
+                        logMessage('🔄 可以点击"重新匹配卡组"按钮进行新的完整解析');
+                    }, 1500);
+                    
+                } else {
+                    logMessage('❌ [步骤1] 卡组匹配失败，请重试', 'error');
+                    matchBtn.disabled = false;
+                    matchBtn.textContent = '🎲 随机匹配卡组 (完整解析)';
+                }
+            } catch (error) {
+                logMessage(`❌ 解析过程中出现错误: ${error.message}`, 'error');
+                console.error('解析错误:', error);
+                matchBtn.disabled = false;
+                matchBtn.textContent = '🎲 随机匹配卡组 (完整解析)';
+            }
+        }
+        
+        // 显示卡组的完整信息
+        function displayDeckFullInfo(deckNumber, deckData) {
+            logMessage(`📋 [步骤1] 显示卡组${deckNumber}完整信息: ${deckData.name}`);
+            
+            // 基本卡组信息
+            document.getElementById(`deck${deckNumber}Name`).textContent = `卡组${deckNumber}: ${deckData.name}`;
+            document.getElementById(`deck${deckNumber}Subtitle`).textContent = deckData.subtitle || '暂无副标题';
+            document.getElementById(`deck${deckNumber}Icon`).textContent = deckData.icon || '🃏';
+            document.getElementById(`deck${deckNumber}Id`).textContent = `ID: ${deckData.id || '未知'}`;
+            
+            // 策略信息
+            document.getElementById(`deck${deckNumber}Strategy`).textContent = deckData.strategy || '暂无策略信息';
+            document.getElementById(`deck${deckNumber}BattleTactics`).textContent = deckData.battleTactics || '暂无战斗战术';
+            document.getElementById(`deck${deckNumber}Description`).textContent = deckData.description || '暂无描述';
+            
+            // 偏好设置
+            displayPreferences(deckNumber, 'Personalities', deckData.preferredPersonalities || []);
+            displayPreferences(deckNumber, 'CostRange', deckData.costRange || []);
+            displayPreferences(deckNumber, 'Effects', deckData.preferredEffects || []);
+            
+            // 统计信息
+            if (deckData.stats) {
+                document.getElementById(`deck${deckNumber}Stats`).innerHTML = `
+                    <div class="stat-item">
+                        <div class="stat-value">${deckData.stats.avgCost || 0}</div>
+                        <div class="stat-label">平均费用</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${deckData.stats.avgAttack || 0}</div>
+                        <div class="stat-label">平均攻击</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${deckData.stats.avgHealth || 0}</div>
+                        <div class="stat-label">平均生命</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${deckData.stats.totalCards || 0}</div>
+                        <div class="stat-label">卡牌总数</div>
+                    </div>
+                `;
+            }
+            
+            // 卡牌解析
+            logMessage(`🔍 [步骤2] 开始解析卡组${deckNumber}的卡牌信息...`);
+            displayDeckCards(deckNumber, deckData.cardIds || []);
+        }
+        
+        // 显示偏好设置
+        function displayPreferences(deckNumber, type, items) {
+            const container = document.getElementById(`deck${deckNumber}${type}`);
+            container.innerHTML = '';
+            
+            if (items.length === 0) {
+                container.innerHTML = '<span class="pref-tag">无偏好设置</span>';
+                return;
+            }
+            
+            if (Array.isArray(items)) {
+                items.forEach(item => {
+                    const tag = document.createElement('span');
+                    tag.className = 'pref-tag';
+                    tag.textContent = item;
+                    container.appendChild(tag);
+                });
+            } else {
+                const tag = document.createElement('span');
+                tag.className = 'pref-tag';
+                tag.textContent = items;
+                container.appendChild(tag);
+            }
+        }
+        
+        // 显示卡组中的所有卡牌
+        function displayDeckCards(deckNumber, cardIds) {
+            const cardsContainer = document.getElementById(`deck${deckNumber}Cards`);
+            const totalCardsElement = document.getElementById(`deck${deckNumber}TotalCards`);
+            
+            // 更新总卡牌数
+            totalCardsElement.textContent = cardIds.length;
+            
+            // 清空容器
+            cardsContainer.innerHTML = '';
+            
+            if (cardIds.length === 0) {
+                cardsContainer.innerHTML = `
+                    <div class="placeholder">
+                        ⚠️ 此卡组没有卡牌数据
+                    </div>
+                `;
+                logMessage(`⚠️ 卡组${deckNumber}没有卡牌数据`);
+                return;
+            }
+            
+            // 统计信息
+            let foundCards = 0;
+            let missingCards = 0;
+            
+            // 为每个卡牌ID查找完整的卡牌信息
+            cardIds.forEach((cardId, index) => {
+                logMessage(`🔍 [步骤2] 查找卡牌: ${cardId}`);
+                
+                // 在balanced_shrimp_cards_30hp_corrected.js中查找卡牌数据
+                const cardData = balancedShrimpCards30HP.find(card => card.id === cardId);
+                
+                if (cardData) {
+                    foundCards++;
+                    // 创建卡牌显示面板
+                    createCardPanel(deckNumber, cardsContainer, cardData);
+                    logMessage(`✅ [步骤2] 找到卡牌数据: ${cardData.name}`);
+                } else {
+                    missingCards++;
+                    // 创建缺失卡牌的面板
+                    createMissingCardPanel(deckNumber, cardsContainer, cardId);
+                    logMessage(`⚠️ [步骤2] 未找到卡牌数据: ${cardId}`);
+                }
+            });
+            
+            logMessage(`📊 [步骤2] 卡组${deckNumber}解析完成: 找到 ${foundCards} 张，缺失 ${missingCards} 张`);
+        }
+        
+        // 创建卡牌面板
+        function createCardPanel(deckNumber, container, cardData) {
+            const cardPanel = document.createElement('div');
+            cardPanel.className = 'card-panel';
+            
+            // 构建卡图路径
+            const imagePath = `images/shrimp-cards/${cardData.id}.png`;
+            const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjE0MCIgdmlld0JveD0iMCAwIDEwMCAxNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxNDAiIHJ4PSIxMCIgZmlsbD0iIzNiODJmNiIvPjxwYXRoIGQ9Ik0zMCA1MEw1MCA3MEw3MCA1MFY0MEw1MCA2MEwzMCA0MFY1MFoiIGZpbGw9IndoaXRlIi8+PHRleHQgeD0iNTAiIHk9IjkwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxMiIgZm9udC13ZWlnaHQ9ImJvbGQiPkNhcmQ8L3RleHQ+PC9zdmc+';
+            
+            // 确定稀有度样式
+            const rarity = cardData.rarity || '普通';
+            let rarityClass = 'rarity-common';
+            if (rarity.includes('稀有')) rarityClass = 'rarity-rare';
+            if (rarity.includes('史诗')) rarityClass = 'rarity-epic';
+            if (rarity.includes('传说')) rarityClass = 'rarity-legendary';
+            
+            cardPanel.innerHTML = `
+                <div class="card-header">
+                    <div class="card-image">
+                        <img src="${imagePath}" alt="${cardData.name}" 
+                             onerror="this.src='${fallbackImage}'" 
+                             onload="logMessage('🖼️ [步骤3] 卡图加载成功: ${cardData.id}.png', 'success')"
+                             onerror="logMessage('⚠️ [步骤3] 卡图加载失败: ${cardData.id}.png', 'warning')">
+                    </div>
+                    <div class="card-basic-info">
+                        <div class="card-name">${cardData.name}</div>
+                        <div class="card-id">ID: ${cardData.id}</div>
+                        
+                        <div class="card-stats">
+                            <div class="card-stat">
+                                <span class="stat-number cost-number">${cardData.cost}</span>
+                                <span class="stat-label-small">费用</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="stat-number attack-number">${cardData.attack}</span>
+                                <span class="stat-label-small">攻击力</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="stat-number health-number">${cardData.health}</span>
+                                <span class="stat-label-small">生命值</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="rarity-tag ${rarityClass}">${rarity}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-details">
+                    <div class="detail-row">
+                        <div class="detail-label">愿望:</div>
+                        <div class="detail-value">${cardData.wish || '未知'}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">性格:</div>
+                        <div class="detail-value">${cardData.personality || '未知'}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">审美:</div>
+                        <div class="detail-value">${cardData.aesthetic || '未知'}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">总战力:</div>
+                        <div class="detail-value">${cardData.total_power || cardData.base_power || '未知'}</div>
+                    </div>
+                </div>
+                
+                <div class="effect-box">
+                    <div class="effect-label">卡牌效果</div>
+                    <div class="effect-text">${cardData.effect || "无特殊效果"}</div>
+                </div>
+            `;
+            
+            container.appendChild(cardPanel);
+        }
+        
+        // 创建缺失卡牌的面板
+        function createMissingCardPanel(deckNumber, container, cardId) {
+            const cardPanel = document.createElement('div');
+            cardPanel.className = 'card-panel';
+            cardPanel.style.opacity = '0.7';
+            cardPanel.style.borderColor = '#ef4444';
+            
+            cardPanel.innerHTML = `
+                <div class="card-header">
+                    <div class="card-image" style="background: #ef4444; display: flex; align-items: center; justify-content: center;">
+                        <div style="color: white; font-size: 2rem;">❓</div>
+                    </div>
+                    <div class="card-basic-info">
+                        <div class="card-name" style="color: #ef4444;">缺失的卡牌</div>
+                        <div class="card-id" style="color: #ef4444;">ID: ${cardId}</div>
+                        
+                        <div class="card-stats">
+                            <div class="card-stat">
+                                <span class="stat-number" style="color: #ef4444;">?</span>
+                                <span class="stat-label-small">费用</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="stat-number" style="color: #ef4444;">?</span>
+                                <span class="stat-label-small">攻击力</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="stat-number" style="color: #ef4444;">?</span>
+                                <span class="stat-label-small">生命值</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="effect-box" style="background: rgba(239, 68, 68, 0.15);">
+                    <div class="effect-label">状态</div>
+                    <div class="effect-text" style="color: #ef4444;">未找到卡牌数据</div>
+                </div>
+                
+                <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
+                    提示: 在 balanced_shrimp_cards_30hp_corrected.js 中未找到此卡牌ID
+                </div>
+            `;
+            
+            container.appendChild(cardPanel);
+        }
+        
+        // 日志记录函数
+        function logMessage(message, type = 'info') {
+            const logContent = document.getElementById('operationLog');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            // 根据类型设置不同的样式
+            if (type === 'error') {
+                logEntry.style.borderLeftColor = '#ef4444';
+                logEntry.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                message = '❌ ' + message;
+            } else if (type === 'warning') {
+                logEntry.style.borderLeftColor = '#fbbf24';
+                logEntry.style.backgroundColor = 'rgba(251, 191, 36, 0.1)';
+                message = '⚠️ ' + message;
+            } else if (type === 'success') {
+                logEntry.style.borderLeftColor = '#10b981';
+                logEntry.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                message = '✅ ' + message;
+            } else {
+                message = 'ℹ️ ' + message;
+            }
+            
+            logEntry.textContent = `[${getCurrentTime()}] ${message}`;
+            logContent.appendChild(logEntry);
+            
+            // 自动滚动到底部
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        // 获取当前时间
+        function getCurrentTime() {
+            const now = new Date();
+            return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+        }
+            // ======================
+        // AI对战系统
+        // ======================
+        
+        // 游戏状态
+        let battleStarted = false;
+        let currentPlayer = 'player1'; // 当前回合玩家
+        let turnNumber = 1;
+        let player1Deck = [];
+        let player2Deck = [];
+        let player1Hand = [];
+        let player2Hand = [];
+        let player1Battlefield = [];
+        let player2Battlefield = [];
+        let player1Graveyard = 0;
+        let player2Graveyard = 0;
+        
+        // DOM元素引用
+        const startBattleBtn = document.getElementById('startBattleBtn');
+        const resetBattleBtn = document.getElementById('resetBattleBtn');
+        const battleStatusText = document.getElementById('battleStatusText');
+        const battleInfo = document.getElementById('battleInfo');
+        const fullBattleBoard = document.getElementById('fullBattleBoard');
+        const turnIndicator = document.getElementById('turnIndicator');
+        
+        // 检查是否已经匹配了卡组，然后启用AI对战按钮
+        function checkBattleReady() {
+            // 检查是否已经匹配了两个卡组
+            const deck1Name = document.getElementById('deck1Name');
+            const deck2Name = document.getElementById('deck2Name');
+            
+            if (deck1Name && deck2Name && 
+                deck1Name.textContent !== '卡组1 (等待匹配)' && 
+                deck2Name.textContent !== '卡组2 (等待匹配)') {
+                
+                // 启用AI对战按钮
+                startBattleBtn.disabled = false;
+                battleStatusText.textContent = '可以开启AI对战';
+                battleInfo.textContent = '卡组匹配完成，点击"开启AI对战"开始游戏';
+                
+                // 更新玩家名称
+                const player1DeckName = document.getElementById('player1DeckName');
+                const player2DeckName = document.getElementById('player2DeckName');
+                if (player1DeckName) player1DeckName.textContent = deck1Name.textContent.replace('卡组1 - ', '');
+                if (player2DeckName) player2DeckName.textContent = deck2Name.textContent.replace('卡组2 - ', '');
+            }
+        }
+        
+        // 初始化费用水晶
+        function initManaCrystals() {
+            // 玩家1 - 初始3点费用
+            const player1ManaCrystals = document.getElementById('player1ManaCrystals');
+            if (player1ManaCrystals) {
+                player1ManaCrystals.innerHTML = '';
+                for (let i = 1; i <= 10; i++) {
+                    const crystal = document.createElement('div');
+                    crystal.className = i <= 3 ? 'mana-crystal' : 'mana-crystal empty';
+                    crystal.textContent = i <= 3 ? i : '';
+                    crystal.style.cssText = 'width: 30px; height: 30px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);';
+                    if (i > 3) {
+                        crystal.style.background = 'rgba(59, 130, 246, 0.2)';
+                        crystal.style.color = 'rgba(255, 255, 255, 0.5)';
+                    }
+                    player1ManaCrystals.appendChild(crystal);
+                }
+            }
+            
+            // 玩家2 - 初始4点费用
+            const player2ManaCrystals = document.getElementById('player2ManaCrystals');
+            if (player2ManaCrystals) {
+                player2ManaCrystals.innerHTML = '';
+                for (let i = 1; i <= 10; i++) {
+                    const crystal = document.createElement('div');
+                    crystal.className = i <= 4 ? 'mana-crystal' : 'mana-crystal empty';
+                    crystal.textContent = i <= 4 ? i : '';
+                    crystal.style.cssText = 'width: 30px; height: 30px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);';
+                    if (i > 4) {
+                        crystal.style.background = 'rgba(59, 130, 246, 0.2)';
+                        crystal.style.color = 'rgba(255, 255, 255, 0.5)';
+                    }
+                    player2ManaCrystals.appendChild(crystal);
+                }
+            }
+        }
+        
+        // 创建手牌卡片
+        function createHandCard(cardData, player) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'hand-card';
+            cardDiv.style.cssText = 'background: rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 10px; min-width: 80px; text-align: center; border: 1px solid rgba(16, 185, 129, 0.4); cursor: pointer; transition: all 0.2s ease;';
+            
+            cardDiv.innerHTML = `
+                <div style="font-size: 1.2rem; font-weight: bold; color: #ff9a3c; margin-bottom: 5px;">${cardData.cost || '?'}</div>
+                <div style="font-size: 0.8rem; color: #fff; margin-bottom: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${cardData.name || '未知卡牌'}</div>
+                <div style="display: flex; justify-content: center; gap: 8px;">
+                    <div style="font-size: 0.7rem; color: #ef4444; font-weight: bold;">${cardData.attack || '?'}</div>
+                    <div style="font-size: 0.7rem; color: #10b981; font-weight: bold;">${cardData.health || '?'}</div>
+                </div>
+            `;
+            
+            // 悬停效果
+            cardDiv.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 5px 15px rgba(16, 185, 129, 0.2)';
+            });
+            
+            cardDiv.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+            
+            return cardDiv;
+        }
+        
+        // 初始化手牌
+        function initHands() {
+            // 从匹配的卡组中获取卡牌数据
+            const deck1CardIds = window.matchedDeck1 ? window.matchedDeck1.cardIds : [];
+            const deck2CardIds = window.matchedDeck2 ? window.matchedDeck2.cardIds : [];
+            
+            // 玩家1手牌 - 随机抽取3张
+            const player1HandContainer = document.getElementById('player1Hand');
+            if (player1HandContainer) {
+                player1HandContainer.innerHTML = '';
+                
+                if (deck1CardIds.length > 0) {
+                    // 随机抽取3张卡牌
+                    for (let i = 0; i < Math.min(3, deck1CardIds.length); i++) {
+                        const cardId = deck1CardIds[i];
+                        const cardData = balancedShrimpCards30HP.find(card => card.id === cardId);
+                        
+                        if (cardData) {
+                            const handCard = createHandCard(cardData, 'player1');
+                            player1HandContainer.appendChild(handCard);
+                        } else {
+                            // 创建占位卡
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'hand-card';
+                            placeholder.style.cssText = 'background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 10px; min-width: 80px; text-align: center; border: 1px dashed rgba(255, 255, 255, 0.3); color: #94a3b8; font-style: italic;';
+                            placeholder.textContent = '卡牌';
+                            player1HandContainer.appendChild(placeholder);
+                        }
+                    }
+                    
+                    // 更新手牌计数
+                    document.getElementById('player1HandCount').textContent = Math.min(3, deck1CardIds.length);
+                }
+            }
+            
+            // 玩家2手牌 - 随机抽取3张
+            const player2HandContainer = document.getElementById('player2Hand');
+            if (player2HandContainer) {
+                player2HandContainer.innerHTML = '';
+                
+                if (deck2CardIds.length > 0) {
+                    // 随机抽取3张卡牌
+                    for (let i = 0; i < Math.min(3, deck2CardIds.length); i++) {
+                        const cardId = deck2CardIds[i];
+                        const cardData = balancedShrimpCards30HP.find(card => card.id === cardId);
+                        
+                        if (cardData) {
+                            const handCard = createHandCard(cardData, 'player2');
+                            player2HandContainer.appendChild(handCard);
+                        } else {
+                            // 创建占位卡
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'hand-card';
+                            placeholder.style.cssText = 'background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 10px; min-width: 80px; text-align: center; border: 1px dashed rgba(255, 255, 255, 0.3); color: #94a3b8; font-style: italic;';
+                            placeholder.textContent = '卡牌';
+                            player2HandContainer.appendChild(placeholder);
+                        }
+                    }
+                    
+                    // 更新手牌计数
+                    document.getElementById('player2HandCount').textContent = Math.min(3, deck2CardIds.length);
+                }
+            }
+        }
+        
+        // 开启AI对战
+        function startAIBattle() {
+            if (battleStarted) return;
+            
+            battleStarted = true;
+            startBattleBtn.disabled = true;
+            startBattleBtn.textContent = '🤖 对战进行中';
+            
+            // 显示完整棋盘
+            fullBattleBoard.style.display = 'block';
+            
+            // 显示回合指示器
+            turnIndicator.style.display = 'block';
+            document.getElementById('currentPlayer').textContent = '玩家1';
+            document.getElementById('turnNumber').textContent = turnNumber;
+            
+            // 初始化费用水晶
+            initManaCrystals();
+            
+            // 初始化手牌
+            initHands();
+            
+            // 更新状态
+            battleStatusText.textContent = 'AI对战已开始';
+            battleInfo.textContent = `第${turnNumber}回合 - 玩家1的回合`;
+            
+            // 记录日志
+            logMessage('🤖 AI对战开始！', 'success');
+            logMessage(`🎲 玩家1初始费用: 3点`, 'info');
+            logMessage(`🎲 玩家2初始费用: 4点`, 'info');
+            logMessage(`🃏 双方各抽取3张初始手牌`, 'info');
+            logMessage(`⚔️ 第${turnNumber}回合开始 - 玩家1的回合`, 'success');
+        }
+        
+        // 重置对战
+        function resetBattle() {
+            battleStarted = false;
+            currentPlayer = 'player1';
+            turnNumber = 1;
+            
+            // 重置按钮状态
+            startBattleBtn.disabled = false;
+            startBattleBtn.textContent = '🤖 开启AI对战';
+            
+            // 隐藏完整棋盘
+            fullBattleBoard.style.display = 'none';
+            
+            // 隐藏回合指示器
+            turnIndicator.style.display = 'none';
+            
+            // 重置状态
+            battleStatusText.textContent = '可以开启AI对战';
+            battleInfo.textContent = '卡组匹配完成，点击"开启AI对战"开始游戏';
+            
+            // 记录日志
+            logMessage('🔄 AI对战已重置', 'warning');
+        }
+        
+        // 事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查对战准备状态
+            setTimeout(checkBattleReady, 1000);
+            
+            // 定期检查是否匹配了卡组
+            setInterval(checkBattleReady, 3000);
+            
+            // 按钮事件
+            if (startBattleBtn) {
+                startBattleBtn.addEventListener('click', startAIBattle);
+            }
+            
+            if (resetBattleBtn) {
+                resetBattleBtn.addEventListener('click', resetBattle);
+            }
+        });
+    </script>
+</body>
+</html>

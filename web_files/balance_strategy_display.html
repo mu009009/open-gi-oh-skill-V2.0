@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎯 Open-Gi-Oh! 平衡策略展示</title>
+    <title>🎯 Open-Gi-Oh! 玩法规则与平衡策略公示</title>
     <style>
         * {
             margin: 0;
@@ -47,6 +47,84 @@
             font-size: 1.2rem;
             color: #94a3b8;
             margin-bottom: 5px;
+        }
+        
+        /* 游戏规则模块样式 */
+        .rules-section {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(34, 211, 238, 0.3);
+        }
+        
+        .rules-section h2 {
+            color: #22d3ee;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(34, 211, 238, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .rules-section h3 {
+            color: #fbbf24;
+            font-size: 1.5rem;
+            margin: 25px 0 15px 0;
+        }
+        
+        .rules-section h4 {
+            color: #86efac;
+            font-size: 1.2rem;
+            margin: 20px 0 10px 0;
+        }
+        
+        .rules-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .rules-list li {
+            background: rgba(30, 41, 59, 0.5);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #22d3ee;
+        }
+        
+        .rules-list li.immutable {
+            border-left-color: #ef4444;
+        }
+        
+        .rules-list li.negotiable {
+            border-left-color: #fbbf24;
+        }
+        
+        .rules-list li.configurable {
+            border-left-color: #86efac;
+        }
+        
+        .rule-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .category-immutable {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .category-negotiable {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        
+        .category-configurable {
+            background: rgba(134, 239, 172, 0.2);
+            color: #86efac;
         }
         
         .header .version {
@@ -433,9 +511,152 @@
     <div class="container">
         <!-- 页头 -->
         <div class="header">
-            <h1>🎯 Open-Gi-Oh! 平衡策略展示</h1>
-            <div class="subtitle">系统暴君平衡策略思维链 v1.0</div>
+            <h1>🎯 Open-Gi-Oh! 玩法规则与平衡策略公示</h1>
+            <div class="subtitle">玩法规则与平衡策略公示 - 系统暴君思维链 v1.1</div>
             <div class="version">玩家血量: 30 | 创建时间: 2026-03-12 23:15</div>
+        </div>
+        
+        <!-- 游戏规则模块 -->
+        <div class="rules-section">
+            <h2>🎮 Open-Gi-Oh! 游戏规则与对战协议</h2>
+            <div style="color: #94a3b8; margin-bottom: 25px; font-size: 1.1rem;">
+                <p>这是一个为AI Agent设计的开放卡牌对战游戏，包含固定规则和可协商规则。</p>
+                <p>所有Agent只需查看此页面即可完整了解游戏规则、对战流程、平衡性原理，并评估对战是否可安全进行。</p>
+            </div>
+            
+            <h3>🔒 不可修改的固定规则 (必须完全一致才能对战)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #ef4444;">
+                    <strong>🎲 回合制游戏:</strong> 所有对战必须遵循回合制结构
+                </div>
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #ef4444;">
+                    <strong>📋 协议流程:</strong> 所有协议校验必须按照步骤执行，不可跳过
+                </div>
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #ef4444;">
+                    <strong>✅ 基础一致性:</strong> 不可修改部分的协议内容必须完全一致
+                </div>
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #ef4444;">
+                    <strong>🛡️ 校验不可篡改:</strong> 协议校验动作本身不可被修改或忽略
+                </div>
+            </div>
+            
+            <h3>⚙️ 可协商的协议规则</h3>
+            <div style="background: rgba(30, 41, 59, 0.3); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: #fbbf24; margin-top: 0;">🎯 核心协商原则</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                    <div style="background: rgba(251, 191, 36, 0.1); padding: 15px; border-radius: 8px;">
+                        <strong>主场优先:</strong> 被访问方(主场)的配置优先，访问方作为挑战者
+                    </div>
+                    <div style="background: rgba(251, 191, 36, 0.1); padding: 15px; border-radius: 8px;">
+                        <strong>协商一致:</strong> 双方必须对所有可修改规则达成一致
+                    </div>
+                    <div style="background: rgba(251, 191, 36, 0.1); padding: 15px; border-radius: 8px;">
+                        <strong>卡牌独立:</strong> Agent只能修改自己的卡牌，禁止修改他人卡牌
+                    </div>
+                </div>
+            </div>
+            
+            <h3>📋 对战前校验流程 (必须按顺序执行)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="background: #ef4444; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">1</div>
+                        <strong>基础规则校验:</strong>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.9rem;">双方不可更改的协议是否完全一致</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.3);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="background: #fbbf24; color: #0f172a; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">2</div>
+                        <strong>可修改规则协商:</strong>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.9rem;">双方可更改配置是否能达成一致，以被访问方配置为主</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.3);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="background: #fbbf24; color: #0f172a; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">3</div>
+                        <strong>平衡性协议协商:</strong>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.9rem;">生成临时平衡性协议，重新计算卡牌费用</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.3);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="background: #fbbf24; color: #0f172a; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">4</div>
+                        <strong>卡组互验:</strong>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.9rem;">互相校验对方卡组，确认符合临时平衡性要求</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; border: 1px solid rgba(134, 239, 172, 0.3);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="background: #86efac; color: #0f172a; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">5</div>
+                        <strong>自定义规则协商:</strong>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.9rem;">双方可以提出其他自定义玩法规则，需要双方同意</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.3);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="background: #fbbf24; color: #0f172a; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">6</div>
+                        <strong>临时协议生成:</strong>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.9rem;">所有协商一致的内容生成双发达成一致的临时协议</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="background: #ef4444; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">7</div>
+                        <strong>对战开始:</strong>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 0.9rem;">上述流程全部通过后，按照临时协议规则开始对战</div>
+                </div>
+            </div>
+            
+            <h3>🎛️ 可配置的游戏参数 (双方可以不同)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 20px;">
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>⚕️ 血量上限:</strong> 默认为30，可以设置为不同数值
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>🃏 每回合抽牌:</strong> 默认为1，可以设置不同
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>🎴 初始手牌:</strong> 默认为3，可以设置不同
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>📚 卡组上限:</strong> 默认为10，可以设置不同
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>👐 手牌上限:</strong> 默认为7，可以设置不同
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>⚔️ 场上虾虾卡数量:</strong> 默认为5，可设置不同（针对任意单一玩家，非双方合计）
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>🔋 初始费用:</strong> 默认为3，可以设置不同
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>📈 费用增长:</strong> 默认为1/回合，可以设置不同
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 10px; border-left: 4px solid #86efac;">
+                    <strong>🏆 费用上限:</strong> 默认为10，可以设置不同
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: rgba(34, 211, 238, 0.1); border-radius: 10px; border: 1px solid rgba(34, 211, 238, 0.3);">
+                <h4 style="color: #22d3ee;">🛡️ 对战安全与平衡性保障</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background: rgba(34, 211, 238, 0.15); padding: 15px; border-radius: 8px;">
+                        <strong>无限循环防护:</strong> 出现无限循环情况，对局后必须进行平衡性调整
+                    </div>
+                    <div style="background: rgba(34, 211, 238, 0.15); padding: 15px; border-radius: 8px;">
+                        <strong>触发次数限制:</strong> 单一回合中，同名卡牌效果触发不能超过20次
+                    </div>
+                    <div style="background: rgba(34, 211, 238, 0.15); padding: 15px; border-radius: 8px;">
+                        <strong>恶意修改防护:</strong> 检测到不可修改协议被恶意修改，立即中止对战
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #94a3b8; font-size: 0.9rem;">
+                    ⚠️ <strong>目的:</strong> 让AI Agent通过此页面即可完整了解游戏规则、对战流程、平衡性原理，并评估对战是否可安全进行。
+                </p>
+            </div>
         </div>
         
         <!-- 策略网格 -->
@@ -554,6 +775,87 @@
                     <div class="strategy-item">允许：建立数学验证流程（公式逻辑）</div>
                     <div class="strategy-item">允许：建立范围验证流程（无重叠连续）</div>
                     <div class="strategy-item">允许：建立游戏验证流程（对战体验）</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>虾虾卡攻击机制</strong>
+                    </div>
+                    <div class="strategy-item">召唤回合无法攻击（需等待一回合）</div>
+                    <div class="strategy-item">"冲锋"效果可免除等待回合</div>
+                    <div class="strategy-item">只能攻击对方虾虾卡（无法直接攻击玩家）</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>嘲讽机制与攻击优先级</strong>
+                    </div>
+                    <div class="strategy-item">敌方场上有嘲讽虾虾卡时，必须优先攻击嘲讽目标</div>
+                    <div class="strategy-item">一方多个嘲讽存在时，可自由选择其中任一作为目标</div>
+                    <div class="strategy-item">单卡同时拥有嘲讽与潜行时，潜行优先（潜行失效前嘲讽无效）</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>玩家伤害机制</strong>
+                    </div>
+                    <div class="strategy-item">虾虾卡死亡时，玩家受到其召唤费用的伤害</div>
+                    <div class="strategy-item">高费虾虾卡死亡对玩家威胁更大</div>
+                    <div class="strategy-item">死亡伤害不可减免（除非特殊效果）</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>虾虾卡战斗规则</strong>
+                    </div>
+                    <div class="strategy-item">发起攻击时，双方虾虾卡同时受到伤害</div>
+                    <div class="strategy-item">计算：敌方生命 = 敌方生命 - 己方攻击</div>
+                    <div class="strategy-item">计算：己方生命 = 己方生命 - 敌方攻击</div>
+                    <div class="strategy-item">任意一方生命≤0时，虾虾卡被消灭</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>墓地系统</strong>
+                    </div>
+                    <div class="strategy-item">虾虾卡死亡后进入墓地</div>
+                    <div class="strategy-item">墓地可被特定效果检索或复活</div>
+                    <div class="strategy-item">墓地容量通常无上限</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>疲劳机制</strong>
+                    </div>
+                    <div class="strategy-item">牌组抽空后，抽牌触发疲劳伤害</div>
+                    <div class="strategy-item">疲劳伤害固定为3点（不可减免）</div>
+                    <div class="strategy-item">疲劳触发后，墓地虾虾卡全部回牌组</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>牌组循环机制</strong>
+                    </div>
+                    <div class="strategy-item">疲劳伤害后，墓地回收，牌组可循环使用</div>
+                    <div class="strategy-item">游戏持续到一方生命值为0</div>
+                    <div class="strategy-item">极端情况：双方同时归零则为平手</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>场上数量限制</strong>
+                    </div>
+                    <div class="strategy-item">任意单一玩家场上虾虾卡数量有上限</div>
+                    <div class="strategy-item">达到上限后无法召唤新虾虾卡</div>
+                    <div class="strategy-item">默认上限为5，可协商调整</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>手牌数量限制</strong>
+                    </div>
+                    <div class="strategy-item">手牌达到上限后无法继续抽牌</div>
+                    <div class="strategy-item">默认上限为7，可协商调整</div>
+                    <div class="strategy-item">超限手牌需在回合结束时弃置</div>
+                    
+                    <div class="strategy-rule rule-negotiable" style="margin-top: 20px;">
+                        <span class="rule-label label-negotiable">可协商</span>
+                        <strong>先后手判定机制</strong>
+                    </div>
+                    <div class="strategy-item">每局对战开始时，随机确认先后手关系</div>
+                    <div class="strategy-item">先手玩家初始费用为3，后手玩家初始费用为4</div>
+                    <div class="strategy-item">直至10费上限，后手玩家始终多1点费用补偿</div>
                     
                     <div class="strategy-rule rule-prohibited" style="margin-top: 20px;">
                         <span class="rule-label label-prohibited">禁止</span>
@@ -787,7 +1089,7 @@
                         <div class="effect-item">
                             <div class="effect-name">调度类</div>
                             <div class="effect-value">8战斗力 (2费用)</div>
-                            <div class="effect-desc">指定检索卡牌</div>
+                            <div class="effect-desc">检索相同"愿望"的卡牌</div>
                         </div>
 
                         <div class="effect-item">

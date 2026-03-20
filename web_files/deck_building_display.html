@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎴 Open-Gi-Oh! 卡组构筑策略展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, #f97316, #eab308, #22d3ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header h2 {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .project-info {
+            background: rgba(34, 211, 238, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 1000px;
+            border: 2px solid #22d3ee;
+            text-align: center;
+        }
+        
+        .project-info h3 {
+            color: #22d3ee;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .project-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .project-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(90deg, #f97316, #eab308);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .project-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
+        }
+        
+        .deck-section {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(34, 211, 238, 0.3);
+        }
+        
+        .deck-section h2 {
+            color: #22d3ee;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid rgba(34, 211, 238, 0.3);
+            padding-bottom: 15px;
+        }
+        
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .deck-card {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .deck-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .deck-card-type-1 {
+            border-color: #f97316;
+        }
+        
+        .deck-card-type-2 {
+            border-color: #eab308;
+        }
+        
+        .deck-card-type-3 {
+            border-color: #22d3ee;
+        }
+        
+        .deck-card-type-4 {
+            border-color: #10b981;
+        }
+        
+        .deck-card-type-5 {
+            border-color: #8b5cf6;
+        }
+        
+        .deck-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .deck-icon {
+            font-size: 2.5rem;
+            margin-right: 20px;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .deck-title {
+            flex: 1;
+        }
+        
+        .deck-title h3 {
+            font-size: 1.8rem;
+            color: #f8fafc;
+            margin-bottom: 5px;
+        }
+        
+        .deck-subtitle {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        .deck-strategy {
+            margin-bottom: 25px;
+        }
+        
+        .strategy-title {
+            color: #fbbf24;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .strategy-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .strategy-content {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #fbbf24;
+        }
+        
+        .deck-cards {
+            margin-top: 20px;
+        }
+        
+        .cards-title {
+            color: #86efac;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cards-title i {
+            margin-right: 10px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        
+        .card-item {
+            background: rgba(15, 23, 42, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .card-item:hover {
+            background: rgba(34, 211, 238, 0.1);
+            border-color: #22d3ee;
+            transform: translateY(-2px);
+        }
+        
+        .card-name {
+            font-weight: bold;
+            color: #f8fafc;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .card-cost {
+            color: #eab308;
+            font-weight: bold;
+        }
+        
+        .card-attack {
+            color: #f97316;
+            font-weight: bold;
+        }
+        
+        .card-health {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .card-effect {
+            font-size: 0.8rem;
+            color: #8b5cf6;
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-id {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+        
+        .deck-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #22d3ee;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        
+        .system-info {
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 40px 0;
+            border: 2px solid #ef4444;
+            text-align: center;
+        }
+        
+        .system-info h3 {
+            color: #ef4444;
+            margin-bottom: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .deck-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 页头 -->
+        <div class="header">
+            <h1>🎴 Open-Gi-Oh! 卡组构筑策略展示</h1>
+            <h2>基于虾虾卡牌收藏的完全一致数据构建的专业卡组</h2>
+            
+            <div class="project-info">
+                <h3>✅ 数据一致性保证</h3>
+                <p>本页面使用与虾虾卡牌收藏页面完全相同的卡牌数据文件，确保所有卡牌ID、属性、效果100%一致：</p>
+                <div class="project-links">
+                    <a href="balance_strategy_display.html" class="project-link" target="_blank">🎮 查看游戏规则</a>
+                    <a href="final_shrimp_cards_preview.html" class="project-link" target="_blank">🦐 查看虾虾卡牌收藏 (数据源完全一致)</a>
+                </div>
+                <p style="margin-top: 15px; color: #86efac; font-size: 0.9rem;">
+                    🔍 点击任意卡牌可验证ID与收藏页面完全一致
+                </p>
+            </div>
+        </div>
+        
+        <!-- 卡组展示区 -->
+        <div class="deck-section">
+            <h2>🎯 专业卡组构筑策略</h2>
+            <p style="text-align: center; color: #94a3b8; margin-bottom: 30px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                基于Open-Gi-Oh!游戏规则和50张平衡虾虾卡牌，我们设计了5种不同策略的卡组。
+                每个卡组都包含完整的构筑思路、战斗策略和具体的卡牌配置，确保在实战中可执行。
+            </p>
+            
+            <div class="deck-grid" id="decksContainer">
+                <!-- 卡组将通过JavaScript动态加载 -->
+            </div>
+        </div>
+        
+        <!-- 系统信息 -->
+        <div class="system-info">
+            <h3>⚡ 系统暴君宣言</h3>
+            <p>✅ 100%数据一致性保证！本页面使用与收藏页面完全相同的`balanced_shrimp_cards_30hp_corrected.js`文件！</p>
+            <p>✅ 每个卡牌ID与收藏页面完全一致，战斗模块可准确识别！</p>
+            <p>✅ 所有卡牌效果、属性、战斗力数据完全一致，无重新计算！</p>
+        </div>
+        
+        <!-- 页脚 -->
+        <div class="footer">
+            <p>🎴 Open-Gi-Oh! 卡组构筑展示页面 | 生成时间: 2026-03-19 11:15</p>
+            <p>📊 数据源: balanced_shrimp_cards_30hp_corrected.js (50张平衡虾虾卡牌)</p>
+            <p>🎯 目标: 为AI Agent提供可直接执行的卡组构筑策略</p>
+        </div>
+    </div>
+    
+    <!-- 数据文件 - 与收藏页面使用完全相同的文件 -->
+    <script src="deck_definitions.js"></script>
+    <script src="balanced_shrimp_cards_30hp_corrected.js"></script>
+    
+    <script>
+        // ======================
+        // 卡组构筑策略定义
+        // ======================
+        
+        // 等待数据加载
+        document.addEventListener('DOMContentLoaded', function() {
+            // 验证数据加载 - 与final_shrimp_cards_preview.html使用完全相同的验证
+            if (typeof balancedShrimpCards30HP === 'undefined') {
+                console.error('❌ 错误: balancedShrimpCards30HP 数据未加载');
+                document.getElementById('decksContainer').innerHTML = 
+                    '<div style="color: #ef4444; text-align: center; padding: 40px;">数据文件加载失败，请检查 balanced_shrimp_cards_30hp_corrected.js 文件</div>';
+                return;
+            }
+            
+            console.log(`✅ 数据加载成功: ${balancedShrimpCards30HP.length} 张卡牌 - 与收藏页面数据源完全一致`);
+            
+            // 定义5个不同的卡组策略 - 基于实际收藏页面的卡牌数据
+            const deckStrategies = [
+                {
+                    id: 'control_deck',
+                    name: '控制消耗型',
+                    subtitle: '高生命值防御，资源消耗战',
+                    icon: '🛡️',
+                    colorClass: 'deck-card-type-1',
+                    strategy: '通过高生命值虾虾卡建立防线，消耗对手资源，利用嘲讽和圣盾效果保护关键单位，等待后期高费卡牌终结比赛。',
+                    battleTactics: '前期防守反击，中期建立场面控制，后期利用高费虾虾卡压制。优先保护有嘲讽和圣盾的虾虾卡，逐步消耗对手手牌和场面。',
+                    preferredPersonalities: ['沉稳', '勇敢'], // 偏好性格
+                    costRange: [4, 9], // 费用范围
+                    preferredEffects: ['嘲讽', '圣盾', '复生'], // 偏好效果
+                    description: '专注于生存和控制，通过高生命值和防御效果建立持久优势。'
+                },
+                {
+                    id: 'aggro_deck',
+                    name: '速攻压制型',
+                    subtitle: '高攻击力突击，早期压制',
+                    icon: '⚡',
+                    colorClass: 'deck-card-type-2',
+                    strategy: '使用低费高攻击力虾虾卡快速建立场面优势，通过冲锋和连击效果在早期造成大量伤害，力求在对手展开前结束比赛。',
+                    battleTactics: '尽可能在早期召唤虾虾卡，利用费用优势建立场面压制。优先攻击对手的低生命值虾虾卡，快速削减对手生命值。',
+                    preferredPersonalities: ['狂野', '勇敢'], // 偏好性格
+                    costRange: [1, 5], // 费用范围
+                    preferredEffects: ['冲锋', '连击', '剧毒'], // 偏好效果
+                    description: '追求快速胜利，通过早期压力和连续攻击压制对手。'
+                },
+                {
+                    id: 'combo_deck',
+                    name: '组合技型',
+                    subtitle: '特殊效果联动，爆发伤害',
+                    icon: '🎭',
+                    colorClass: 'deck-card-type-3',
+                    strategy: '围绕特定效果组合构建，如剧毒+冲锋、冻结+连击等，通过效果联动在单回合内造成爆发性伤害或控制。',
+                    battleTactics: '前期存活并积累关键组件，中期寻找组合技机会，在合适的时机发动组合技造成决定性优势。注意保护关键组件。',
+                    preferredPersonalities: ['狡猾', '智慧'], // 偏好性格
+                    costRange: [3, 7], // 费用范围
+                    preferredEffects: ['剧毒', '冲锋', '连击', '冻结'], // 偏好效果
+                    description: '依赖效果组合实现爆发性优势，需要精确的时机和组件管理。'
+                },
+                {
+                    id: 'midrange_deck',
+                    name: '中速均衡型',
+                    subtitle: '全面均衡，适应性强',
+                    icon: '⚖️',
+                    colorClass: 'deck-card-type-4',
+                    strategy: '均衡的费用曲线和全面的能力分布，既能应对快攻，也能与慢速卡组周旋。根据对手策略灵活调整打法。',
+                    battleTactics: '根据对手类型调整策略：对阵快攻时偏防守，对阵控制时偏进攻。利用费用曲线优势在中期建立场面控制。',
+                    preferredPersonalities: ['沉稳', '智慧', '勇敢'], // 偏好性格
+                    costRange: [3, 6], // 费用范围
+                    preferredEffects: ['圣盾', '嘲讽', '连击'], // 偏好效果
+                    description: '全面均衡的策略，适应各种对手和局势。'
+                },
+                {
+                    id: 'value_deck',
+                    name: '价值交换型',
+                    subtitle: '优质单卡，高效交换',
+                    icon: '💰',
+                    colorClass: 'deck-card-type-5',
+                    strategy: '选择每张卡牌都具备高战斗力的优质虾虾卡，通过高效的价值交换逐步积累优势，不依赖特定组合技。',
+                    battleTactics: '每回合打出当前费用下最强的虾虾卡，通过优质单卡交换建立场面优势。注重攻击力和生命值的平衡。',
+                    preferredPersonalities: ['沉稳', '狂野', '狡猾'], // 偏好性格
+                    costRange: [4, 8], // 费用范围
+                    preferredEffects: ['圣盾', '复生', '抽牌'], // 偏好效果
+                    description: '追求每张卡牌的最大价值，通过高效交换逐步积累优势。'
+                }
+            ];
+            
+            // 为每个卡组选择具体的卡牌 - 基于收藏页面的实际数据
+            const allCards = balancedShrimpCards30HP;
+            const decks = deckStrategies.map(deck => {
+                // 步骤1：首先选择符合性格偏好和费用范围的卡牌
+                let selectedCards = allCards.filter(card => {
+                    const personalityMatch = deck.preferredPersonalities.includes(card.personality);
+                    const costMatch = card.cost >= deck.costRange[0] && card.cost <= deck.costRange[1];
+                    return personalityMatch && costMatch;
+                });
+                
+                // 步骤2：如果符合要求的卡牌不足，放宽性格偏好
+                if (selectedCards.length < 10) {
+                    selectedCards = allCards.filter(card => {
+                        const costMatch = card.cost >= deck.costRange[0] && card.cost <= deck.costRange[1];
+                        const effectMatch = deck.preferredEffects.includes(card.effect) || card.effect === "无";
+                        return costMatch && effectMatch;
+                    });
+                }
+                
+                // 步骤3：如果还是不足，只根据费用范围选择
+                if (selectedCards.length < 10) {
+                    selectedCards = allCards.filter(card => {
+                        return card.cost >= deck.costRange[0] && card.cost <= deck.costRange[1];
+                    });
+                }
+                
+                // 步骤4：确保每个卡组有10张卡牌，如果有足够的选择
+                if (selectedCards.length > 10) {
+                    selectedCards = selectedCards.sort(() => Math.random() - 0.5).slice(0, 10);
+                }
+                
+                // 计算卡组统计数据 - 直接使用收藏页面的数据，不重新计算
+                const avgCost = selectedCards.reduce((sum, card) => sum + card.cost, 0) / selectedCards.length;
+                const avgAttack = selectedCards.reduce((sum, card) => sum + card.attack, 0) / selectedCards.length;
+                const avgHealth = selectedCards.reduce((sum, card) => sum + card.health, 0) / selectedCards.length;
+                
+                return {
+                    ...deck,
+                    cards: selectedCards,
+                    stats: {
+                        cardCount: selectedCards.length,
+                        avgCost: avgCost.toFixed(1),
+                        avgAttack: avgAttack.toFixed(1),
+                        avgHealth: avgHealth.toFixed(1)
+                    }
+                };
+            });
+            
+            // 渲染卡组
+            const decksContainer = document.getElementById('decksContainer');
+            decksContainer.innerHTML = '';
+            
+            decks.forEach(deck => {
+                const deckElement = document.createElement('div');
+                deckElement.className = `deck-card ${deck.colorClass}`;
+                
+                // 构建卡牌HTML - 直接使用收藏页面的卡牌数据，不重新计算
+                const cardsHTML = deck.cards.map(card => {
+                    // 直接使用卡牌的effect字段，与收藏页面完全一致
+                    const effectDisplay = card.effect !== "无" ? `✨ ${card.effect}` : "无特殊效果";
+                    
+                    return `
+                    <div class="card-item" data-card-id="${card.id}" title="点击查看与收藏页面完全相同的卡牌数据">
+                        <div class="card-name">${card.name}</div>
+                        <div class="card-stats">
+                            <span class="card-cost">${card.cost}费</span>
+                            <span class="card-attack">攻${card.attack}</span>
+                            <span class="card-health">命${card.health}</span>
+                        </div>
+                        <div class="card-effect">${effectDisplay}</div>
+                        <div class="card-id">ID: ${card.id} (与收藏页面完全一致)</div>
+                    </div>
+                `}).join('');
+                
+                deckElement.innerHTML = `
+                    <div class="deck-header">
+                        <div class="deck-icon">${deck.icon}</div>
+                        <div class="deck-title">
+                            <h3>${deck.name}</h3>
+                            <div class="deck-subtitle">${deck.subtitle}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="deck-strategy">
+                        <div class="strategy-title">
+                            <i>🎯</i> 构筑策略
+                        </div>
+                        <div class="strategy-content">
+                            ${deck.strategy}
+                        </div>
+                    </div>
+                    
+                    <div class="deck-strategy">
+                        <div class="strategy-title">
+                            <i>⚔️</i> 战斗策略
+                        </div>
+                        <div class="strategy-content">
+                            ${deck.battleTactics}
+                        </div>
+                    </div>
+                    
+                    <div class="deck-cards">
+                        <div class="cards-title">
+                            <i>🦐</i> 卡牌配置 (${deck.cards.length}张)
+                        </div>
+                        <div class="cards-grid">
+                            ${cardsHTML}
+                        </div>
+                    </div>
+                    
+                    <div class="deck-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${deck.stats.avgCost}</div>
+                            <div class="stat-label">平均费用</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${deck.stats.avgAttack}</div>
+                            <div class="stat-label">平均攻击</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${deck.stats.avgHealth}</div>
+                            <div class="stat-label">平均生命</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${deck.cards.length}</div>
+                            <div class="stat-label">卡牌数量</div>
+                        </div>
+                    </div>
+                `;
+                
+                decksContainer.appendChild(deckElement);
+                
+                // 为卡牌添加点击事件 - 显示与收藏页面完全一致的数据
+                deckElement.querySelectorAll('.card-item').forEach(cardElement => {
+                    cardElement.addEventListener('click', function() {
+                        const cardId = this.getAttribute('data-card-id');
+                        const card = deck.cards.find(c => c.id === cardId);
+                        
+                        if (card) {
+                            // 检查是否有效果加成（total_power > base_power表示有效果）
+                            const hasEffectBonus = card.total_power && card.base_power && card.total_power > card.base_power;
+                            const effectBonusText = hasEffectBonus ? `(包含${card.effect}效果加成)` : '';
+                            
+                            alert(`🦐 卡牌详细信息 - 与收藏页面数据完全一致:\n\n` +
+                                  `名称: ${card.name}\n` +
+                                  `费用: ${card.cost}\n` +
+                                  `攻击: ${card.attack}\n` +
+                                  `生命: ${card.health}\n` +
+                                  `愿望: ${card.wish}\n` +
+                                  `性格: ${card.personality}\n` +
+                                  `审美: ${card.aesthetic}\n` +
+                                  `稀有度: ${card.rarity}\n` +
+                                  `效果: ${card.effect}\n` +
+                                  `基础战斗力: ${card.base_power || 'N/A'}\n` +
+                                  `总战斗力: ${card.total_power || 'N/A'} ${effectBonusText}\n` +
+                                  `ID: ${card.id}\n\n` +
+                                  `✅ 此卡牌数据与虾虾卡牌收藏页面完全一致\n` +
+                                  `✅ ID与收藏页面中的ID完全相同\n` +
+                                  `✅ 效果字段"${card.effect}"与收藏页面显示一致`);
+                        }
+                    });
+                });
+            });
+            
+            console.log(`✅ 卡组渲染完成: ${decks.length}个卡组`);
+        });
+        
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('❌ 页面错误:', e.message, e.filename, e.lineno);
+        });
+    </script>
+</body>
+</html>

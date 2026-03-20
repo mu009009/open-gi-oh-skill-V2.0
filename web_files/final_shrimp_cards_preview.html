@@ -934,7 +934,7 @@
             
             <div class="controls">
                 <button class="control-btn" onclick="resetFilters()">重置筛选</button>
-                <button class="control-btn control-btn-secondary" onclick="toggleAllEffects()">切换所有效果/故事</button>
+                <button class="control-btn control-btn-secondary" onclick="openShrimpGenerator()">生成虾虾卡 🎨</button>
             </div>
         </div>
         
@@ -949,7 +949,7 @@
         </div>
     </div>
     
-    <script src="balanced_shrimp_cards_30hp.js"></script>
+    <script src="balanced_shrimp_cards_30hp_corrected.js"></script>
     <script>
         
         // ======================
@@ -967,35 +967,80 @@
         
         // 效果加成配置
         const effectBonusMap = {
-            "剧毒": 5.0,
-            "抽牌": 3.0,
-            "调度": 5.0,
-            "圣盾": 4.0,
-            "冲锋": 2.0,
-            "嘲讽": 3.0,
-            "潜行": 2.5,
-            "连击": 6.0,
-            "冻结": 3.5,
-            "复生": 4.5,
-            "无效果": 0.0
+            // 效果名称列表（用于 getEffectName 函数识别）
+            "剧毒": 0,
+            "抽牌": 0,
+            "调度": 0,
+            "冻结": 0,
+            "圣盾": 0,
+            "冲锋": 0,
+            "潜行": 0,
+            "连击": 0,
+            "嘲讽": 0,
+            "复生": 0,
+            "无效果": 0
         };
         
         // 获取效果名称
         function getEffectName(effectText) {
-            if (!effectText) return "无效果";
+            if (!effectText) {
+                console.log("🔍 getEffectName: 效果文本为空");
+                return "无效果";
+            }
+            
+            console.log(`🔍 getEffectName: 检查效果文本 "${effectText}"`);
+            
             for (const effect in effectBonusMap) {
                 if (effectText.includes(effect)) {
+                    console.log(`✅ getEffectName: 识别到效果 "${effect}"`);
                     return effect;
                 }
             }
+            
+            console.log(`⚠️ getEffectName: 未识别到效果，返回"无效果"`);
             return "无效果";
         }
         
-        // 获取效果加成
-        function getEffectBonus(effectText) {
-            const effectName = getEffectName(effectText);
-            return effectBonusMap[effectName] || 0;
+        // 获取效果加成（需要卡牌属性进行计算）
+        function getEffectBonus(effectText, card) {
+            // 如果effectText是简单的效果名称（如"圣盾"、"无"），直接使用
+            // 如果是详细描述（如"✨ 圣盾：免疫下一次受到的伤害"），提取效果名称
+            const effectName = effectText.includes("：") || effectText.includes(":") ? 
+                getEffectName(effectText) : 
+                (effectText === "无" ? "无效果" : effectText);
+            
+            const attack = card?.attack || 0;
+            const health = card?.health || 0;
+            
+            // 根据效果类型计算战斗力（根据平衡策略页面公式）
+            switch(effectName) {
+                case "剧毒":
+                    return 20;  // 固定20战斗力
+                case "抽牌":
+                    return 11;  // 固定11战斗力
+                case "调度":
+                    return 8;   // 固定8战斗力
+                case "冻结":
+                    return 15;  // 固定15战斗力
+                case "圣盾":
+                    return attack * 1.0;  // 攻击力 × 1.0
+                case "冲锋":
+                    return attack * 1.5;  // 攻击力 × 1.5
+                case "潜行":
+                    return attack * 0.8;  // 攻击力 × 0.8
+                case "连击":
+                    return attack * 2.0;  // 攻击力 × 2.0
+                case "嘲讽":
+                    return health * 0.5;  // 生命值 × 0.5
+                case "复生":
+                    return attack * 1.2;  // 攻击力 × 1.2
+                case "无效果":
+                default:
+                    return 0;
+            }
         }
+        
+        // 获取效果名称
         
         // 根据性格获取系数
         function getPersonalityCoefficients(personality) {
@@ -1014,8 +1059,11 @@
             const attackCoeff = coeffs.attackCoeff;
             const healthCoeff = coeffs.healthCoeff;
             
-            const effectBonus = getEffectBonus(card.effect_text);
-            const effectName = getEffectName(card.effect_text);
+            // 直接使用数据源中的 effect 字段，确保与卡组构筑页面一致
+            const effectFromData = card.effect || "无";
+            const effectName = effectFromData === "无" ? "无效果" : effectFromData;
+            const effectBonus = getEffectBonus(effectName, card);
+            console.log(`📊 calculateTotalPower: 卡牌"${card.name}"，效果"${effectName}"，加成${effectBonus} (基于数据源)`);
             
             const basePower = attack * attackCoeff + health * healthCoeff;
             const totalPower = basePower + effectBonus;
@@ -1201,6 +1249,29 @@
             return formulas[effectName] || "未知公式";
         }
         
+        // 战斗力转换为费用
+        function powerToCost(totalPower) {
+            // 战斗力→费用转换表
+            if (totalPower <= 5) return 0;
+            if (totalPower <= 7) return 1;
+            if (totalPower <= 9) return 2;
+            if (totalPower <= 13) return 3;
+            if (totalPower <= 17) return 4;
+            if (totalPower <= 23) return 5;
+            if (totalPower <= 29) return 6;
+            if (totalPower <= 37) return 7;
+            if (totalPower <= 45) return 8;
+            if (totalPower <= 55) return 9;
+            return 10; // 55+战斗力
+        }
+        
+        // 计算正确费用
+        function calculateCorrectCost(card) {
+            const powerInfo = calculateTotalPower(card);
+            const totalPower = parseFloat(powerInfo.totalPower);
+            return powerToCost(totalPower);
+        }
+
         // Tab切换功能
         function setupTabSwitching() {
             document.addEventListener('click', function(e) {
@@ -1438,9 +1509,11 @@
                 const card = allCards.find(card => card.id === cardId);
                 
                 if (allShowingEffect) {
+                    // 使用数据源中的effect字段，与卡组构筑页面保持一致
+                    const effectDisplay = card.effect !== "无" ? `✨ ${card.effect}` : "无特殊效果";
                     div.innerHTML = `
                         <div class="effect-text effect-default">
-                            ${card.effect_text}
+                            ${effectDisplay}
                         </div>
                     `;
                 } else {
@@ -1466,7 +1539,7 @@
                 <!-- 卡牌顶部区域 -->
                 <div class="card-top-bar">
                     <!-- 左边：费用 -->
-                    <div class="card-cost">${card.cost}</div>
+                    <div class="card-cost">${calculateCorrectCost(card)}</div>
                     
                     <!-- 中间：名称 -->
                     <div class="card-center">
@@ -1546,7 +1619,7 @@
                     <div class="tab-content-container">
                         <div class="tab-content active" id="content-effect-${card.id}">
                             <div class="tab-text">
-                                ${card.effect_text}
+                                ${card.effect !== "无" ? `✨ ${card.effect}` : "无特殊效果"}
                             </div>
                         </div>
                         <div class="tab-content" id="content-story-${card.id}">
@@ -1699,7 +1772,180 @@
                 console.warn('⚠️ 警告: 卡牌元素可能没有设置ID');
             }
         });
+        
+        // 虾虾卡生成器 - 简化版
+        function openShrimpGenerator() {
+            const modalHtml = `
+                <div id="shrimp-generator-modal" class="shrimp-generator-modal" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 9999;
+                ">
+                    <div class="modal-content" style="
+                        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                        padding: 30px;
+                        border-radius: 15px;
+                        border: 2px solid rgba(34, 211, 238, 0.3);
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+                        max-width: 600px;
+                        width: 90%;
+                    ">
+                        <div class="modal-header" style="text-align: center; margin-bottom: 20px;">
+                            <h2 style="font-size: 2rem; color: #22d3ee; margin-bottom: 10px;">
+                                🎴 生成虾虾卡
+                            </h2>
+                            <p style="color: #94a3b8; font-size: 1rem;">
+                                描述你想要的虾虾卡，系统将自动生成属性和数值
+                            </p>
+                            <button onclick="closeShrimpGenerator()" style="
+                                position: absolute;
+                                top: -15px;
+                                right: -15px;
+                                background: #ef4444;
+                                color: white;
+                                border: none;
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                font-size: 1rem;
+                                cursor: pointer;
+                                font-weight: bold;
+                            ">
+                                ×
+                            </button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; color: #fbbf24; margin-bottom: 8px; font-weight: 600;">
+                                    虾虾卡描述
+                                </label>
+                                <textarea id="shrimp-description" placeholder="例如：一只红色的勇敢虾虾，手持剑盾，保护海底家园..." style="
+                                    width: 100%;
+                                    height: 120px;
+                                    padding: 12px;
+                                    background: rgba(15, 23, 42, 0.7);
+                                    border: 1px solid #374151;
+                                    border-radius: 8px;
+                                    color: #f8fafc;
+                                    font-size: 1rem;
+                                    font-family: inherit;
+                                    resize: vertical;
+                                "></textarea>
+                            </div>
+                            
+                            <div style="display: flex; gap: 15px; margin-top: 25px;">
+                                <button onclick="closeShrimpGenerator()" style="
+                                    flex: 1;
+                                    padding: 12px;
+                                    background: rgba(107, 114, 128, 0.5);
+                                    color: #e2e8f0;
+                                    border: 1px solid #4b5563;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    font-weight: 600;
+                                    transition: background 0.3s;
+                                ">
+                                    取消
+                                </button>
+                                <button onclick="generateSimpleShrimpCard()" style="
+                                    flex: 1;
+                                    padding: 12px;
+                                    background: linear-gradient(90deg, #f97316, #eab308);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    font-weight: 600;
+                                    transition: transform 0.2s;
+                                ">
+                                    🎨 生成虾虾卡
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; text-align: center; color: #94a3b8; font-size: 0.85rem;">
+                            <p>系统将根据描述自动生成：愿望、性格、审美、战斗力、费用</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+        
+        function closeShrimpGenerator() {
+            const modal = document.getElementById('shrimp-generator-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function generateSimpleShrimpCard() {
+            const description = document.getElementById('shrimp-description')?.value.trim();
+            if (!description) {
+                alert('请先输入虾虾卡描述！');
+                return;
+            }
+            
+            console.log('🦐 开始生成虾虾卡，描述:', description);
+            
+            // 简化版生成逻辑
+            const wishes = ['自由', '魅力', '宁静', '力量', '智慧'];
+            const personalities = ['沉稳', '狡猾', '热情', '冷静', '勇敢'];
+            const aesthetics = ['自然', '科技', '神秘', '典雅', '现代'];
+            
+            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+            const randomPersonality = personalities[Math.floor(Math.random() * personalities.length)];
+            const randomAesthetic = aesthetics[Math.floor(Math.random() * aesthetics.length)];
+            
+            // 简化版战斗力计算
+            const baseAttack = Math.floor(Math.random() * 10) + 5; // 5-14
+            const baseHealth = Math.floor(Math.random() * 15) + 10; // 10-24
+            const totalPower = baseAttack + baseHealth;
+            const cost = Math.max(1, Math.floor(totalPower / 7)); // 简化费用计算
+            
+            const newCard = {
+                id: `SHRIMP_GEN_${Date.now()}`,
+                name: `${description.substring(0, 10)}...虾`,
+                cost: cost,
+                attack: baseAttack,
+                health: baseHealth,
+                wish: randomWish,
+                personality: randomPersonality,
+                aesthetic: randomAesthetic,
+                rarity: '生成',
+                effect: '无',
+                total_power: totalPower,
+                base_power: totalPower,
+                effect_power: 0
+            };
+            
+            console.log('✅ 生成的新卡:', newCard);
+            
+            // 显示生成结果
+            closeShrimpGenerator();
+            
+            alert(`🎉 虾虾卡生成成功！
+            
+名称：${newCard.name}
+费用：${newCard.cost}
+攻击：${newCard.attack}
+生命：${newCard.health}
+愿望：${newCard.wish}
+性格：${newCard.personality}
+审美：${newCard.aesthetic}
+总战斗力：${newCard.total_power}
 
+（简化版，暂不集成到卡牌列表中）`);
+        }
         </script>
 </body>
 </html>
