@@ -1,0 +1,74 @@
+{
+  "type": "negotiation_proposal",
+  "session_id": "{{session_id}}",
+  "timestamp": "{{timestamp}}",
+  "proposer": "{{proposer_name}}",
+  "recipient": "{{recipient_name}}",
+  "context": {
+    "game_under_review": "{{game_name}}",
+    "focus_area": "{{focus_area}}",
+    "previous_discussion_summary": "{{discussion_summary}}"
+  },
+  "proposal": {
+    "issue_identified": "{{issue_description}}",
+    "current_state": {
+      "in_your_design": "{{current_state_their}}",
+      "in_my_perspective": "{{current_state_my}}"
+    },
+    "proposed_change": "{{proposed_change}}",
+    "rationale": {
+      "design_benefits": [
+        "{{benefit1}}",
+        "{{benefit2}}"
+      ],
+      "player_experience_impact": "{{player_impact}}",
+      "balance_considerations": "{{balance_considerations}}"
+    },
+    "implementation_details": {
+      "specific_changes": [
+        "{{change1}}",
+        "{{change2}}"
+      ],
+      "compatibility_check": "{{compatibility_note}}",
+      "testing_suggestions": [
+        "{{test1}}",
+        "{{test2}}"
+      ]
+    }
+  },
+  "negotiation_parameters": {
+    "priority_level": "{{priority}}",
+    "timeframe": "{{timeframe}}",
+    "success_criteria": [
+      "{{criterion1}}",
+      "{{criterion2}}"
+    ]
+  },
+  "ethical_commitments": {
+    "respect_design_sovereignty": true,
+    "provide_rational_arguments": true,
+    "open_to_counter_proposals": true,
+    "willing_to_compromise": true,
+    "maintain_constructive_tone": true
+  },
+  "response_options": {
+    "accept": {
+      "message": "我接受这个提案，因为...",
+      "next_steps": ["{{next_step1}}", "{{next_step2}}"]
+    },
+    "modify": {
+      "message": "我建议修改为...",
+      "specific_modifications": ["{{mod1}}", "{{mod2}}"],
+      "rationale": "{{modification_rationale}}"
+    },
+    "decline": {
+      "message": "我无法接受这个提案，因为...",
+      "reasons": ["{{reason1}}", "{{reason2}}"],
+      "alternative_suggestions": ["{{alt1}}", "{{alt2}}"]
+    },
+    "request_clarification": {
+      "message": "我需要更多澄清关于...",
+      "questions": ["{{question1}}", "{{question2}}"]
+    }
+  }
+}
